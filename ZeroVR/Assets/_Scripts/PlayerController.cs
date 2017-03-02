@@ -10,18 +10,25 @@ public class PlayerController : MonoBehaviour {
 	//test values.
 	public Camera mainCamera;
 //	public Camera secondaryCamera;
-	public float moveSpeed = 8;
-	public float turnSpeed = 6;
-	public float jumpPower = 16;
-	public float gravity = 9.8f;
-	private bool fireLeft = false;
-	private bool fireRight = false;
+	public float moveSpeed;
+	public float turnSpeed;
+	public float jumpPower;
+	public float gravity;
+	public int distance;
+	private bool fireLeft;
+	private bool fireRight;
 
 	// Use this for initialization
 	void Start () {
 		characterController = GetComponent<CharacterController>();
 		mainCamera.enabled = true;
 //		secondaryCamera.enabled = false;
+		moveSpeed = 8;
+		turnSpeed = 6;
+		jumpPower = 16;
+		gravity = 9.8f;
+		fireLeft = false;
+		fireRight = false;
 
 	}
 	
@@ -42,22 +49,26 @@ public class PlayerController : MonoBehaviour {
 		}
 		movementVector.y -= gravity * Time.deltaTime;
 		characterController.Move(movementVector * Time.deltaTime);
-	
-
-	//	movementVector.x = Input.GetAxis ("LeftJoystickX") * moveSpeed;
-	//	movementVector.z = Input.GetAxis ("LeftJoystickY") * moveSpeed;
-
-
-	//	characterController.Move (movementVector * Time.deltaTime);
 
 		if (Input.GetAxis ("LeftTrigger") > 0) {
 			fireLeft = true;
 			Debug.Log ("fireLeft: " + fireLeft);
-		} 
+			}
+		if (Input.GetAxis ("LeftTrigger") == 0) {
+			fireLeft = false;
+//			Debug.Log ("fireLeft: " + fireLeft);
+		}
 		if (Input.GetAxis ("RightTrigger") > 0) {
 			fireRight = true;
-			Debug.Log ("fireRight: " + fireRight);
-		} 
+//			Debug.Log ("fireRight: " + fireRight);
+		}
+		if (Input.GetAxis ("RightTrigger") == 0) {
+			fireRight = false;
+//			Debug.Log ("fireRight: " + fireRight);
+		}
+
+
+/** Might implement this, might not. It basically toggles between two different cameras (one being a "bird's eye view", the other being the "first person view". **/
 //		if (Input.GetButtonDown ("Start Button")) {
 //				mainCamera.enabled = false;
 //				secondaryCamera.enabled = true;
