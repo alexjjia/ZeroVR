@@ -9,12 +9,16 @@ public class PlayerController : MonoBehaviour {
 
 	//test values.
 	public Camera mainCamera;
+	public GameObject leftCannon;
+	public GameObject rightCannon;
+	public GameObject bullet;
 //	public Camera secondaryCamera;
 	public float moveSpeed;
 	public float turnSpeed;
 	public float jumpPower;
 	public float gravity;
 	public int distance;
+	public int projectileSpeed;
 	private bool fireLeft;
 	private bool fireRight;
 
@@ -26,6 +30,7 @@ public class PlayerController : MonoBehaviour {
 		moveSpeed = 8;
 		turnSpeed = 6;
 		jumpPower = 16;
+		projectileSpeed = 20;
 		gravity = 9.8f;
 		fireLeft = false;
 		fireRight = false;
@@ -39,7 +44,7 @@ public class PlayerController : MonoBehaviour {
 
 		if (characterController.isGrounded) {
 			movementVector.y = 0; //resets the dood.
-			movementVector = transform.forward * Input.GetAxis ("LeftJoystickY") * moveSpeed;
+			movementVector = (transform.forward * Input.GetAxis ("LeftJoystickY") * moveSpeed) + (transform.right * Input.GetAxis("LeftJoystickX") * moveSpeed);
 			horizontalTurn = Input.GetAxis ("RightJoystickX") * turnSpeed;
 
 			transform.Rotate (new Vector3 (0, horizontalTurn, 0));
@@ -52,7 +57,7 @@ public class PlayerController : MonoBehaviour {
 
 		if (Input.GetAxis ("LeftTrigger") > 0) {
 			fireLeft = true;
-			Debug.Log ("fireLeft: " + fireLeft);
+//			Debug.Log ("fireLeft: " + fireLeft);
 			}
 		if (Input.GetAxis ("LeftTrigger") == 0) {
 			fireLeft = false;
@@ -67,20 +72,24 @@ public class PlayerController : MonoBehaviour {
 //			Debug.Log ("fireRight: " + fireRight);
 		}
 
+		if(fireLeft == true)
+		{
+			fire (leftCannon);
+			//InvokeRepeating ("fire(leftCannon)", 1f, 2f);
+		}
+		if(fireRight == true)
+		{
+			fire (rightCannon);
+			//InvokeRepeating ("fire(rightCannon)", 1f, 2f);
+		}
+	}
 
-/** Might implement this, might not. It basically toggles between two different cameras (one being a "bird's eye view", the other being the "first person view". **/
-//		if (Input.GetButtonDown ("Start Button")) {
-//				mainCamera.enabled = false;
-//				secondaryCamera.enabled = true;
-//			Debug.Log ("mainCam is currently: " + mainCamera.enabled + ", secondaryCam is: " + secondaryCamera.enabled);
-//		}
-//		if (Input.GetButtonDown ("Select Button")) {
-//			{
-//				mainCamera.enabled = true;
-//				secondaryCamera.enabled = false;
-//			}
-//			Debug.Log ("mainCam is currently: " + mainCamera.enabled + ", secondaryCam is: " + secondaryCamera.enabled);
-//		}
+	void fire(GameObject cannon)
+	{
+		GameObject projectile = Instantiate (bullet, cannon.transform.position, cannon.transform.rotation) as GameObject;
+		Rigidbody rb = bullet.GetComponent<Rigidbody>();
+		rb.AddForce (bullet.transform.forward * projectileSpeed);
+		Destroy (projectile, 10.0f);
 	}
 }
 

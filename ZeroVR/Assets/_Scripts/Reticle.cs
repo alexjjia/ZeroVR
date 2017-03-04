@@ -52,7 +52,7 @@ public class Reticle : MonoBehaviour {
 	void showDistance()
 	{
 		canvas.SetActive (showHUD);
-		distanceText.text = "Distance: " + (distance).ToString();
+		distanceText.text = "Distance: " + Mathf.Round(distance).ToString();
 	}
 
 }
